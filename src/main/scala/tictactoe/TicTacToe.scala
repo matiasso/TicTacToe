@@ -53,32 +53,41 @@ class TicTacToe(val player1: Player, val player2: Player) {
   def BoardFull: Boolean = grid.forall(row => !row.contains(Empty))
 
   /**
+   * Gets the owner of given marker (X or O)
+   * @param marker whose owner we want to find
+   * @return Player
+   */
+  def GetMarkerOwner(marker: Marker): Option[Player] = {
+    if (marker == Empty)
+      return None
+    if (player1.marker == marker) Some(player1) else Some(player2)
+  }
+
+  /**
    * Get the winner of the game (or None if the game is tied or not finished)
    * @return Option[Player]
    */
   def GetWinner: Option[Player] = {
-    // Check for horizontal victories:
-    for (r <- grid.indices) {
-      // Are all the elements equal to the first rows element?
-      if (grid(r).forall(m => m != Empty && m == grid(r)(0))) {
+    for (i <- grid.indices) {
+      // Check for horizontal victories:
+      // Are all the elements equal to the rows first element?
+      if (grid(i)(0) != Empty && grid(i).forall(marker => marker == grid(i)(0))) {
         // Return the player whose marker it is
-        return if (player1.marker == grid(r)(0)) Some(player1) else Some(player2)
+        return GetMarkerOwner(grid(i)(0))
       }
-    }
-    // Check for vertical victories:
-    for (c <- grid.indices) {
+      // Check for vertical victories:
       // Are all the elements equal to the first columns element?
-      if (grid.indices.forall(i => grid(i)(c) != Empty && grid(i)(c) == grid(0)(c))) {
+      if (grid(0)(i) != Empty && grid.indices.forall(j => grid(j)(i) == grid(0)(i))) {
         // Return the player whose marker it is
-        return if (player1.marker == grid(0)(c)) Some(player1) else Some(player2)
+        return GetMarkerOwner(grid(0)(i))
       }
     }
     // Check for diagonal victories:
-    if (grid.indices.forall(i => grid(i)(i) != Empty && grid(0)(0) == grid(i)(i))) {
-      return if (player1.marker == grid(0)(0)) Some(player1) else Some(player2)
+    if (grid(0)(0) != Empty && grid.indices.forall(i => grid(i)(i) == grid(0)(0))) {
+      return GetMarkerOwner(grid(0)(0))
     }
-    if (grid.indices.forall(i => grid(i)(2-i) != Empty && grid(0)(2) == grid(i)(2-i))) {
-      return if (player1.marker == grid(0)(2)) Some(player1) else Some(player2)
+    if (grid(0)(2) != Empty && grid.indices.forall(i => grid(i)(2 - i) == grid(0)(2))) {
+      return GetMarkerOwner(grid(0)(2))
     }
     None
   }
