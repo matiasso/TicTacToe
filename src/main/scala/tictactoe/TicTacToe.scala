@@ -98,15 +98,13 @@ class TicTacToe(val player1: Player, val player2: Player) {
    */
   def RandomFreeSpot: (Short, Short) = {
     assert(!BoardFull)
+    // Find all empty slots
+    val emptySlots = grid.flatten.zipWithIndex.filter(_._1 == Empty).map(_._2)
+    // Randomly select one of the emptySlots
     val rnd = new Random()
-    var row = rnd.nextInt(3)
-    var col = rnd.nextInt(3)
-    // Optimize this in case of bad luck
-    while (grid(row)(col) != Empty) {
-      row = rnd.nextInt(3)
-      col = rnd.nextInt(3)
-    }
-    (row.toShort, col.toShort)
+    val index = emptySlots(rnd.nextInt(emptySlots.length))
+    // Return (row, col)
+    ((index / 3).toShort, (index % 3).toShort)
   }
 
   /**
