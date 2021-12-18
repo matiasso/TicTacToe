@@ -6,9 +6,24 @@ import scalafx.scene.layout.HBox
 import scalafx.scene.paint.Color._
 import scalafx.scene.paint._
 import scalafx.scene.text.Text
+import tictactoe.{Markers, Player, TicTacToe}
 
 object UI extends JFXApp3 {
   override def start(): Unit = {
+    val player1 = new Player("Matti", false, Markers.X)
+    val player2 = new Player("Pekka", false, Markers.O)
+    val tictactoe = new TicTacToe(player1, player2)
+    while (!tictactoe.BoardFull && tictactoe.GetWinner.isEmpty) {
+      val rndFreeSpot = tictactoe.RandomFreeSpot
+      tictactoe.PlaceMarker(rndFreeSpot._1, rndFreeSpot._2, tictactoe.GetCurrentMarker)
+      tictactoe.SwapTurn()
+      println(tictactoe.StringRepresentation)
+    }
+    println(tictactoe.StringRepresentation)
+    tictactoe.GetWinner match {
+      case Some(winner) => println("Winner:", winner.name)
+      case None => println("Tied")
+    }
     stage = new JFXApp3.PrimaryStage {
       //    initStyle(StageStyle.Unified)
       title = "ScalaFX Hello World"
