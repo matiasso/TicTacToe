@@ -4,7 +4,7 @@ ThisBuild / scalaVersion := "2.13.7"
 
 lazy val root = (project in file("."))
   .settings(
-    name := "TicTacToe"
+    name := "tictactoe"
   )
 libraryDependencies += "org.scalafx" %% "scalafx" % "16.0.0-R24"
 libraryDependencies ++= {
