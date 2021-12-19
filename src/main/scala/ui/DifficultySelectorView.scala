@@ -7,6 +7,7 @@ import scalafx.scene.layout.VBox
 
 object DifficultySelectorView extends VBox {
   children = Seq(
+    // Make this "Back to main button" somewhere
     new Button("Back to main") {
       maxWidth = 80
       minWidth = 80
@@ -16,5 +17,6 @@ object DifficultySelectorView extends VBox {
         Main.ChangeScene(Main.mainViewStr)
       }
     }
+    // Add 3 different difficulties here
   )
 }
