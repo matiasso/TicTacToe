@@ -3,7 +3,7 @@ package ui
 import scalafx.Includes._
 import scalafx.event.ActionEvent
 import scalafx.geometry.{Insets, Pos}
-import scalafx.scene.control.Button
+import scalafx.scene.control.{Button, Label}
 import scalafx.scene.layout.{Pane, VBox}
 
 object DifficultySelectorView extends VBox {
@@ -12,11 +12,12 @@ object DifficultySelectorView extends VBox {
     difficultyButtons(i) = new Button {
       // Rewrite difficulties with enum or something
       text = if (i == 0) "Easy" else if (i == 1) "Normal" else "Impossible"
-      minWidth = 250
-      maxWidth = 250
-      minHeight = 35
-      maxHeight = 35
-      onAction = (e: ActionEvent) => {
+      alignment = Pos.Center
+      minWidth = 300
+      maxWidth = Double.MaxValue
+      minHeight = 50
+      maxHeight = 50
+      onAction = (_: ActionEvent) => {
         i match {
           case 0 => println("Easy selected!")
           case 1 => println("Normal selected!")
@@ -26,12 +27,17 @@ object DifficultySelectorView extends VBox {
     }
   }
   padding = Insets(10, 10, 10, 10)
-  spacing = 10
+  spacing = 20
   alignment = Pos.Center
   children = Seq(
     new Pane {
       alignment = Pos.TopLeft
       children = Main.GetBackToMainButton
+    },
+    new Label("Choose difficulty") {
+      maxWidth = Double.MaxValue
+      alignment = Pos.Center
+      style = "-fx-font-size: 30pt"
     }
   ) ++ difficultyButtons
 }
