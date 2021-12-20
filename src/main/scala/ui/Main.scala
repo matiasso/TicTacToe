@@ -2,7 +2,9 @@ package ui
 
 import scalafx.Includes._
 import scalafx.application.JFXApp3
+import scalafx.event.ActionEvent
 import scalafx.scene.Scene
+import scalafx.scene.control.Button
 import scalafx.scene.paint.Color
 
 object Main extends JFXApp3 {
@@ -37,10 +39,30 @@ object Main extends JFXApp3 {
     }
   }
 
+  /**
+   * Activates given scene
+   *
+   * @param name of the scene that will be activated
+   */
   def ChangeScene(name: String): Unit = {
     sceneController match {
       case None => throw new Exception("SceneController was empty for some reason")
       case Some(sc) => sc.activate(name)
+    }
+  }
+
+  /**
+   * Returns a new button that will return to the main menu
+   *
+   * @return new Button
+   */
+  def GetBackToMainButton: Button = {
+    new Button("Back to main menu") {
+      maxHeight = 35
+      minHeight = 35
+      onAction = (_: ActionEvent) => {
+        ChangeScene(mainViewStr)
+      }
     }
   }
 }

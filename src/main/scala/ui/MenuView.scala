@@ -12,6 +12,7 @@ import scalafx.scene.text.Text
 
 object MenuView extends VBox {
   alignment = Pos.Center
+  spacing = 10
   padding = Insets(10, 10, 10, 10)
   children = Seq(
     new HBox {
@@ -22,7 +23,7 @@ object MenuView extends VBox {
           style = "-fx-font: normal bold 50pt sans-serif"
           fill = new LinearGradient(
             endX = 0,
-            stops = Stops(Green, DarkRed))
+            stops = Stops(Green, LightBlue))
         },
         new Text {
           text = "made by Matias"

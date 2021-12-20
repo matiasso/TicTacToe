@@ -2,21 +2,36 @@ package ui
 
 import scalafx.Includes._
 import scalafx.event.ActionEvent
+import scalafx.geometry.{Insets, Pos}
 import scalafx.scene.control.Button
-import scalafx.scene.layout.VBox
+import scalafx.scene.layout.{Pane, VBox}
 
 object DifficultySelectorView extends VBox {
-  children = Seq(
-    // Make this "Back to main button" somewhere
-    new Button("Back to main") {
-      maxWidth = 80
-      minWidth = 80
-      maxHeight = 35
+  val difficultyButtons: Array[Button] = new Array[Button](3)
+  for (i <- difficultyButtons.indices) {
+    difficultyButtons(i) = new Button {
+      // Rewrite difficulties with enum or something
+      text = if (i == 0) "Easy" else if (i == 1) "Normal" else "Impossible"
+      minWidth = 250
+      maxWidth = 250
       minHeight = 35
-      onAction = (_: ActionEvent) => {
-        Main.ChangeScene(Main.mainViewStr)
+      maxHeight = 35
+      onAction = (e: ActionEvent) => {
+        i match {
+          case 0 => println("Easy selected!")
+          case 1 => println("Normal selected!")
+          case _ => println("Impossible selected!")
+        }
       }
     }
-    // Add 3 different difficulties here
-  )
+  }
+  padding = Insets(10, 10, 10, 10)
+  spacing = 10
+  alignment = Pos.Center
+  children = Seq(
+    new Pane {
+      alignment = Pos.TopLeft
+      children = Main.GetBackToMainButton
+    }
+  ) ++ difficultyButtons
 }
