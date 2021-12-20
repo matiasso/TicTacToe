@@ -100,16 +100,96 @@ class TicTacToe(val soloMode: Boolean, val difficulty: Difficulty = Normal) {
   def ExecuteAiMove(): Int = {
     val index = difficulty match {
       case Easy => RandomFreeSpot
-      case Normal => RandomFreeSpot
-      case Impossible => RandomFreeSpot
+      case Normal => GetBestMove(1)
+      case Impossible => GetBestMove(9)
       case _ => throw new Exception("Unknown difficulty! Could not execute AI move")
     }
     PlaceMarker(index, player2.marker)
     index
   }
 
-  def minimax(depth: Int, board: Array[Marker]): Unit = {
+  /**
+   * A method that does the actual recursive minimax algorithm
+   *
+   * @param depth      how deep inside the recursive calls are we? (Pass 0 in at first)
+   * @param board      needs to be a clone of current grid
+   * @param maximizing boolean whether we start maximizing or minimizing the value
+   * @param maxDepth   how deep into the recursive calls can we go at most
+   * @return
+   */
+  def minimax(depth: Int, board: Array[Array[Marker]], maximizing: Boolean, maxDepth: Int = 9): Int = {
+    // Define inner evaluation method to "rank" all situations
+    def evaluate(board: Array[Array[Marker]]): Int = {
+      GetWinner(board) match {
+        case Some(p) => if (p.isAI) 10 else -10
+        case None => 0
+      }
+    }
 
+    // Check that we haven't exceeded maximum depth
+    if (depth > maxDepth) {
+      return 0
+    }
+    // check the current state of the board
+    val score = evaluate(board)
+    if (score == 10) {
+      return 10 - depth
+    } else if (score == -10) {
+      return depth - 10
+    }
+    if (BoardFull(board)) {
+      return 0
+    }
+    var best = if (maximizing) -1000 else 1000
+    // Get all the moves
+    for (i <- board.indices) {
+      for (j <- board(0).indices) {
+        if (board(i)(j) == Empty) {
+          // Mark the location
+          board(i)(j) = if (maximizing) O else X
+          val minMaxResult = minimax(depth + 1, board, !maximizing, maxDepth)
+          best = if (maximizing) math.max(minMaxResult, best) else math.min(minMaxResult, best)
+          // Undo the move
+          board(i)(j) = Empty
+        }
+      }
+    }
+    best
+  }
+
+  /**
+   * A method that tries all possible moves and returns the best one according to minimax algorithm
+   *
+   * @param maxDepth how deep we want to go into recursive calls (how many turns ahead)
+   * @return Int index where the computer should place its marker
+   */
+  def GetBestMove(maxDepth: Int): Int = {
+    var bestMove = -1
+    var bestVal = -100
+    // Copy current grid
+    val boardCopy = Array.fill[Array[Marker]](3)(Array.fill[Marker](3)(Markers.Empty))
+    for (i <- grid.indices) {
+      for (j <- grid(0).indices) {
+        boardCopy(i)(j) = grid(i)(j)
+      }
+    }
+    // Try all moves for AI
+    for (i <- boardCopy.indices) {
+      for (j <- boardCopy(0).indices) {
+        if (boardCopy(i)(j) == Empty) {
+          // Mark as computer's marker
+          boardCopy(i)(j) = O
+          val moveVal = minimax(0, boardCopy, maximizing = false, maxDepth)
+          if (moveVal > bestVal) {
+            bestVal = moveVal
+            bestMove = i * 3 + j
+          }
+          // Undo the move
+          boardCopy(i)(j) = Empty
+        }
+      }
+    }
+    bestMove
   }
 
   /**
@@ -124,7 +204,7 @@ class TicTacToe(val soloMode: Boolean, val difficulty: Difficulty = Normal) {
    *
    * @return Boolean
    */
-  def GameEnded: Boolean = BoardFull() || GetWinner().isDefined
+  def GameEnded(board: Array[Array[Marker]] = grid): Boolean = BoardFull() || GetWinner().isDefined
 
   /**
    * Gets the owner of given marker (X or O)

@@ -18,24 +18,23 @@ object GameView extends GridPane {
       text = ""
       style = "-fx-font-size: 50pt"
       onAction = (_: ActionEvent) => {
-        if (!game.GameEnded && game.PlaceMarker(i, game.GetCurrentMarker)) {
+        if (!game.GameEnded() && game.PlaceMarker(i, game.GetCurrentMarker)) {
           text = game.GetMarker(i).toString
-          if (!game.GameEnded) {
+          if (!game.GameEnded()) {
             game.SwapTurn()
             if (game.soloMode) {
+              // Call the AI movement here
               // turnLabel.text = "AI is thinking..."
               val index = game.ExecuteAiMove()
               buttons(index).text = game.GetMarker(index).toString
               // turnLabel.text = game.GetCurrentPlayer.name + " turn"
               game.SwapTurn()
-            } else {
-
             }
             turnLabel.text = game.GetCurrentPlayer.name + " turn"
           }
         }
         // Check if the game just ended now
-        if (game.GameEnded) {
+        if (game.GameEnded()) {
           turnLabel.text = game.GetWinner() match {
             case Some(p) => p.name + " won the game!"
             case None => "Game ended in a tie!"
