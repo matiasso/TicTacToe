@@ -5,7 +5,8 @@ import scalafx.event.ActionEvent
 import scalafx.geometry.{Insets, Pos}
 import scalafx.scene.control.{Button, Label}
 import scalafx.scene.layout.{Pane, VBox}
-import tictactoe.Difficulties
+import tictactoe.Difficulties._
+import tictactoe.{Difficulties, TicTacToe}
 
 object DifficultySelectorView extends VBox {
   val difficultyButtons: Array[Button] = new Array[Button](Difficulties.values.size)
@@ -21,11 +22,12 @@ object DifficultySelectorView extends VBox {
       maxHeight = 50
       onAction = (_: ActionEvent) => {
         i match {
-          case Difficulties.Easy =>
-          case Difficulties.Normal => println("Normal selected!")
-          case Difficulties.Impossible => println("Impossible selected!")
+          case Easy => GameView.StartGame(new TicTacToe(true, Easy))
+          case Normal => GameView.StartGame(new TicTacToe(true, Normal))
+          case Impossible => GameView.StartGame(new TicTacToe(true, Impossible))
           case _ => throw new Exception("Unknown difficulty selected!")
         }
+        Main.ChangeScene(Main.gameViewStr)
       }
     }
   }

@@ -9,6 +9,7 @@ import scalafx.scene.layout.{HBox, VBox}
 import scalafx.scene.paint.Color._
 import scalafx.scene.paint.{LinearGradient, Stops}
 import scalafx.scene.text.Text
+import tictactoe.TicTacToe
 
 object MenuView extends VBox {
   alignment = Pos.Center
@@ -20,14 +21,14 @@ object MenuView extends VBox {
       children = Seq(
         new Text {
           text = "TicTacToe"
-          style = "-fx-font: normal bold 50pt sans-serif"
+          style = "-fx-font: normal bold 48pt sans-serif"
           fill = new LinearGradient(
             endX = 0,
             stops = Stops(Green, LightBlue))
         },
         new Text {
           text = "made by Matias"
-          style = "-fx-font: italic bold 36pt sans-serif"
+          style = "-fx-font: italic bold 34pt sans-serif"
           fill = new LinearGradient(
             endX = 0,
             stops = Stops(Blue, DarkGray)
@@ -46,8 +47,6 @@ object MenuView extends VBox {
       maxHeight = 50
       minHeight = 50
       onAction = (_: ActionEvent) => {
-        println("Button 1p clicked!")
-        // Start 2 player game
         Main.ChangeScene(Main.difficultyViewStr)
       }
     },
@@ -57,8 +56,7 @@ object MenuView extends VBox {
       maxHeight = 50
       minHeight = 50
       onAction = (_: ActionEvent) => {
-        println("Button 2p clicked!")
-        // Start 2 player game
+        GameView.StartGame(new TicTacToe())
         Main.ChangeScene(Main.gameViewStr)
       }
     },

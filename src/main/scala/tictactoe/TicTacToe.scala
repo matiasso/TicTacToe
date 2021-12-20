@@ -1,11 +1,20 @@
 package tictactoe
 
+import tictactoe.Difficulties._
 import tictactoe.Markers._
 
 import scala.collection.mutable.ArrayBuffer
 import scala.util.Random
 
-class TicTacToe(val player1: Player, val player2: Player) {
+class TicTacToe(val soloMode: Boolean, val difficulty: Difficulty = Normal) {
+
+  // Auxiliary constructors
+  def this() = this(false)
+
+  // Define players
+  val player1 = new Player("Player 1", false, X)
+  val player2 = new Player("Player 2", soloMode, O)
+
   // A 2D-array of the markers
   private val grid: Array[Array[Marker]] = Array.fill[Array[Marker]](3)(Array.fill[Marker](3)(Markers.Empty))
   private var player1Turn: Boolean = true // This can be randomized later if needed
@@ -78,7 +87,19 @@ class TicTacToe(val player1: Player, val player2: Player) {
   /**
    * Changes the turn from player1 to player2 or vice versa
    */
-  def SwapTurn(): Unit = player1Turn = !player1Turn
+  def SwapTurn(): Unit = {
+    player1Turn = !player1Turn
+    if (!player1Turn && player2.isAI) {
+      ExecuteAiMove()
+    }
+  }
+
+  /**
+   * Executes the AI move based on the difficulty of this instance
+   */
+  def ExecuteAiMove(): Unit = {
+
+  }
 
   /**
    * Checks whether there are any Empty slots in the grid
@@ -86,6 +107,13 @@ class TicTacToe(val player1: Player, val player2: Player) {
    * @return Boolean
    */
   def BoardFull: Boolean = grid.forall(row => !row.contains(Empty))
+
+  /**
+   * Checks whether the game has ended
+   *
+   * @return Boolean
+   */
+  def GameEnded: Boolean = BoardFull || GetWinner.isDefined
 
   /**
    * Gets the owner of given marker (X or O)
