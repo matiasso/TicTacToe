@@ -29,7 +29,7 @@ object GameView extends GridPane {
             case Some(p) => p.name + " won the game!"
             case None => "Game ended in a tie!"
           }
-          // Show "Play again" dialog?
+          playagainButton.visible = true
         }
       }
     }
@@ -39,6 +39,17 @@ object GameView extends GridPane {
     style = "-fx-font-size: 24pt"
     maxWidth = Double.MaxValue
     alignment = Pos.Center
+  }
+
+  private val playagainButton = new Button("Play again") {
+    style = "-fx-font-size: 24pt"
+    maxWidth = Double.MaxValue
+    alignment = Pos.Center
+    visible = false
+    onAction = (_: ActionEvent) => {
+      visible = false
+      StartGame(new TicTacToe(game))
+    }
   }
 
   private var game: TicTacToe = new TicTacToe()
@@ -52,6 +63,7 @@ object GameView extends GridPane {
   for (i <- buttons.indices) {
     add(buttons(i), i % 3, 2 + i / 3)
   }
+  add(playagainButton, 0, 5, 3, 1)
 
   /**
    * Starts a new game, either 1 or 2 player game

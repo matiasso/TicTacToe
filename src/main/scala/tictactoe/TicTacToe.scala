@@ -11,6 +11,9 @@ class TicTacToe(val soloMode: Boolean, val difficulty: Difficulty = Normal) {
   // Auxiliary constructors
   def this() = this(false)
 
+  // Create a fresh-copy of the game with current settings
+  def this(game: TicTacToe) = this(game.soloMode, game.difficulty)
+
   // Define players
   val player1 = new Player("Player 1", false, X)
   val player2 = new Player("Player 2", soloMode, O)
