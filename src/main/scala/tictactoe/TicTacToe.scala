@@ -90,18 +90,22 @@ class TicTacToe(val soloMode: Boolean, val difficulty: Difficulty = Normal) {
   /**
    * Changes the turn from player1 to player2 or vice versa
    */
-  def SwapTurn(): Unit = {
-    player1Turn = !player1Turn
-    if (!player1Turn && player2.isAI) {
-      ExecuteAiMove()
-    }
-  }
+  def SwapTurn(): Unit = player1Turn = !player1Turn
 
   /**
    * Executes the AI move based on the difficulty of this instance
+   *
+   * @return Int index where the AI placed its marker
    */
-  def ExecuteAiMove(): Unit = {
-
+  def ExecuteAiMove(): Int = {
+    val index = difficulty match {
+      case Easy => RandomFreeSpot
+      case Normal => RandomFreeSpot
+      case Impossible => RandomFreeSpot
+      case _ => throw new Exception("Unknown difficulty! Could not execute AI move")
+    }
+    PlaceMarker(index, player2.marker)
+    index
   }
 
   /**
