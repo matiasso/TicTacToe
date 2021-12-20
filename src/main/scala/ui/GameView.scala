@@ -36,7 +36,7 @@ object GameView extends GridPane {
         }
         // Check if the game just ended now
         if (game.GameEnded) {
-          turnLabel.text = game.GetWinner match {
+          turnLabel.text = game.GetWinner() match {
             case Some(p) => p.name + " won the game!"
             case None => "Game ended in a tie!"
           }

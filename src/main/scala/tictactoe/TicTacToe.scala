@@ -108,19 +108,23 @@ class TicTacToe(val soloMode: Boolean, val difficulty: Difficulty = Normal) {
     index
   }
 
+  def minimax(depth: Int, board: Array[Marker]): Unit = {
+
+  }
+
   /**
    * Checks whether there are any Empty slots in the grid
    *
    * @return Boolean
    */
-  def BoardFull: Boolean = grid.forall(row => !row.contains(Empty))
+  def BoardFull(board: Array[Array[Marker]] = grid): Boolean = board.forall(row => !row.contains(Empty))
 
   /**
    * Checks whether the game has ended
    *
    * @return Boolean
    */
-  def GameEnded: Boolean = BoardFull || GetWinner.isDefined
+  def GameEnded: Boolean = BoardFull() || GetWinner().isDefined
 
   /**
    * Gets the owner of given marker (X or O)
@@ -139,27 +143,27 @@ class TicTacToe(val soloMode: Boolean, val difficulty: Difficulty = Normal) {
    *
    * @return Option[Player]
    */
-  def GetWinner: Option[Player] = {
-    for (i <- grid.indices) {
+  def GetWinner(board: Array[Array[Marker]] = grid): Option[Player] = {
+    for (i <- board.indices) {
       // Check for horizontal victories:
       // Are all the elements equal to the rows first element?
-      if (grid(i)(0) != Empty && grid(i).forall(marker => marker == grid(i)(0))) {
+      if (board(i)(0) != Empty && board(i).forall(marker => marker == board(i)(0))) {
         // Return the player whose marker it is
-        return GetMarkerOwner(grid(i)(0))
+        return GetMarkerOwner(board(i)(0))
       }
       // Check for vertical victories:
       // Are all the elements equal to the first columns element?
-      if (grid(0)(i) != Empty && grid.indices.forall(j => grid(j)(i) == grid(0)(i))) {
+      if (board(0)(i) != Empty && board.indices.forall(j => board(j)(i) == board(0)(i))) {
         // Return the player whose marker it is
-        return GetMarkerOwner(grid(0)(i))
+        return GetMarkerOwner(board(0)(i))
       }
     }
     // Check for diagonal victories:
-    if (grid(0)(0) != Empty && grid.indices.forall(i => grid(i)(i) == grid(0)(0))) {
-      return GetMarkerOwner(grid(0)(0))
+    if (board(0)(0) != Empty && board.indices.forall(i => board(i)(i) == board(0)(0))) {
+      return GetMarkerOwner(board(0)(0))
     }
-    if (grid(0)(2) != Empty && grid.indices.forall(i => grid(i)(2 - i) == grid(0)(2))) {
-      return GetMarkerOwner(grid(0)(2))
+    if (board(0)(2) != Empty && board.indices.forall(i => board(i)(2 - i) == board(0)(2))) {
+      return GetMarkerOwner(board(0)(2))
     }
     None
   }
@@ -170,7 +174,7 @@ class TicTacToe(val soloMode: Boolean, val difficulty: Difficulty = Normal) {
    * @return Int
    */
   def RandomFreeSpot: Int = {
-    assert(!BoardFull)
+    assert(!BoardFull())
     // Find all empty slots
     val emptySlots = grid.flatten.zipWithIndex.filter(_._1 == Empty).map(_._2)
     // Randomly select one of the emptySlots
