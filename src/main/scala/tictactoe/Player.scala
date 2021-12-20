@@ -1,5 +1,6 @@
 package tictactoe
 
+import tictactoe.Difficulties.Difficulty
 import tictactoe.Markers.Marker
 
 /**
@@ -10,18 +11,13 @@ import tictactoe.Markers.Marker
  * @param marker     can be either X or O
  * @param difficulty difficulty of the co-op player
  */
-class Player(val name: String, val isAI: Boolean, val marker: Marker, var difficulty: Short = 1) {
+class Player(val name: String, val isAI: Boolean, val marker: Marker, var difficulty: Difficulty = Difficulties.Normal) {
   private var score = 0
-  // Make enum for difficulty?
-  if (difficulty < 0)
-    difficulty = 0
-  else if (difficulty > 3)
-    difficulty = 3
 
   /**
    * Returns the current players score
    *
-   * @return Int
+   * @return Int indicating the score of the current player
    */
   def GetScore: Int = score
 

@@ -1,4 +1,5 @@
 package tictactoe
+
 import tictactoe.Markers._
 
 import scala.collection.mutable.ArrayBuffer
@@ -6,17 +7,18 @@ import scala.util.Random
 
 class TicTacToe(val player1: Player, val player2: Player) {
   // A 2D-array of the markers
-  val grid: Array[Array[Marker]] = Array.fill[Array[Marker]](3)(Array.fill[Marker](3)(Markers.Empty))
-  var player1Turn: Boolean = true   // This can be randomized later if wanted(?)
+  private val grid: Array[Array[Marker]] = Array.fill[Array[Marker]](3)(Array.fill[Marker](3)(Markers.Empty))
+  private var player1Turn: Boolean = true // This can be randomized later if needed
 
   /**
    * Places the given marker to desired location
-   * @param row number of the row (0, 1, or 2)
+   *
+   * @param row    number of the row (0, 1, or 2)
    * @param column number of the column (0, 1, or 2)
    * @param marker the marker which can be either X or O
    * @return Boolean indicating if the action was successful
    */
-  def PlaceMarker(row: Short, column: Short, marker: Marker): Boolean = {
+  def PlaceMarker(row: Int, column: Int, marker: Marker): Boolean = {
     assert(row >= 0 && row < 3)
     assert(column >= 0 && column < 3)
     // Check that the spot is empty
@@ -30,13 +32,45 @@ class TicTacToe(val player1: Player, val player2: Player) {
   }
 
   /**
+   * Places given marker to given index
+   *
+   * @param index  of the square (0-8)
+   * @param marker the marker which can be either X or O
+   * @return Boolean indicating if the action was successful
+   */
+  def PlaceMarker(index: Int, marker: Marker): Boolean = this.PlaceMarker(index / 3, index % 3, marker)
+
+  /**
+   * Get the marker object at given location
+   *
+   * @param row    number of the row (0, 1, or 2)
+   * @param column number of the column (0, 1, or 2)
+   * @return Marker at given location
+   */
+  def GetMarker(row: Int, column: Int): Marker = {
+    assert(row >= 0 && row < 3)
+    assert(column >= 0 && column < 3)
+    grid(row)(column)
+  }
+
+  /**
+   * Get the marker object at given index
+   *
+   * @param index of the item (0-8)
+   * @return Marker at given index
+   */
+  def GetMarker(index: Int): Marker = this.GetMarker(index / 3, index % 3)
+
+  /**
    * Returns the player whose turn it is
+   *
    * @return Player
    */
   def GetCurrentPlayer: Player = if (player1Turn) player1 else player2
 
   /**
    * Get the current marker, Player1 is always X and Player2 is O
+   *
    * @return Marker object
    */
   def GetCurrentMarker: Marker = GetCurrentPlayer.marker
@@ -48,12 +82,14 @@ class TicTacToe(val player1: Player, val player2: Player) {
 
   /**
    * Checks whether there are any Empty slots in the grid
+   *
    * @return Boolean
    */
   def BoardFull: Boolean = grid.forall(row => !row.contains(Empty))
 
   /**
    * Gets the owner of given marker (X or O)
+   *
    * @param marker whose owner we want to find
    * @return Player
    */
@@ -65,6 +101,7 @@ class TicTacToe(val player1: Player, val player2: Player) {
 
   /**
    * Get the winner of the game (or None if the game is tied or not finished)
+   *
    * @return Option[Player]
    */
   def GetWinner: Option[Player] = {
@@ -93,22 +130,22 @@ class TicTacToe(val player1: Player, val player2: Player) {
   }
 
   /**
-   * Returns a random (row, column) pair that is still empty
-   * @return (Short, Short)
+   * Returns a random index (0-8) that is still empty
+   *
+   * @return Int
    */
-  def RandomFreeSpot: (Short, Short) = {
+  def RandomFreeSpot: Int = {
     assert(!BoardFull)
     // Find all empty slots
     val emptySlots = grid.flatten.zipWithIndex.filter(_._1 == Empty).map(_._2)
     // Randomly select one of the emptySlots
     val rnd = new Random()
-    val index = emptySlots(rnd.nextInt(emptySlots.length))
-    // Return (row, col)
-    ((index / 3).toShort, (index % 3).toShort)
+    emptySlots(rnd.nextInt(emptySlots.length))
   }
 
   /**
    * Get a textual representation of the board situation
+   *
    * @return String
    */
   def StringRepresentation: String = {

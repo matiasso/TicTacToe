@@ -5,13 +5,15 @@ import scalafx.event.ActionEvent
 import scalafx.geometry.{Insets, Pos}
 import scalafx.scene.control.{Button, Label}
 import scalafx.scene.layout.{Pane, VBox}
+import tictactoe.Difficulties
 
 object DifficultySelectorView extends VBox {
-  val difficultyButtons: Array[Button] = new Array[Button](3)
-  for (i <- difficultyButtons.indices) {
-    difficultyButtons(i) = new Button {
+  val difficultyButtons: Array[Button] = new Array[Button](Difficulties.values.size)
+  for (i <- Difficulties.values) {
+    // The IDs go from 0 to 2
+    difficultyButtons(i.id) = new Button {
       // Rewrite difficulties with enum or something
-      text = if (i == 0) "Easy" else if (i == 1) "Normal" else "Impossible"
+      text = Difficulties(i.id).toString
       alignment = Pos.Center
       minWidth = 300
       maxWidth = Double.MaxValue
@@ -19,9 +21,10 @@ object DifficultySelectorView extends VBox {
       maxHeight = 50
       onAction = (_: ActionEvent) => {
         i match {
-          case 0 => println("Easy selected!")
-          case 1 => println("Normal selected!")
-          case _ => println("Impossible selected!")
+          case Difficulties.Easy =>
+          case Difficulties.Normal => println("Normal selected!")
+          case Difficulties.Impossible => println("Impossible selected!")
+          case _ => throw new Exception("Unknown difficulty selected!")
         }
       }
     }
